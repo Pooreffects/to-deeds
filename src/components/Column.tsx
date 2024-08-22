@@ -13,6 +13,9 @@ export default function Column({
 }: ColumnProps) {
   const [active, setActive] = useState(false);
 
+  function handleDragStart(e: React.DragEvent, id: string) {
+    e.dataTransfer.setData('cardId', id);
+  }
   // Filter cards based on the column
   const filteredCards = cards.filter((card) => card.column === column);
 
@@ -31,7 +34,9 @@ export default function Column({
       >
         {/* Map through filtered cards and render them here if needed */}
         {filteredCards.map((card) => {
-          return <Card key={card.id} {...card} />;
+          return (
+            <Card key={card.id} {...card} handleDragStart={handleDragStart} />
+          );
         })}
         <DropIndicator beforeId='-1' column={column} />
         <AddCard column={column} setCards={setCards} />
