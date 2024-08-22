@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ColumnProps } from '../interfaces/board';
 import Card from './Card';
+import DropIndicator from './DropIndicator';
 
 export default function Column({
   title,
@@ -31,8 +32,8 @@ export default function Column({
         {filteredCards.map((card) => {
           return <Card key={card.id} {...card} />;
         })}
+        <DropIndicator beforeId='-1' column={column} />
       </div>
     </div>
   );
 }
-

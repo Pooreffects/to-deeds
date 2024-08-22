@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DEFAULT_CARDS } from '../constants';
 import { Card } from '../interfaces/board';
 import Column from './Column';
+import BurnBarrel from './BurnBarrel';
 
 export default function KanbanBoard() {
   const [cards, setCards] = useState<Card[]>(DEFAULT_CARDS);
@@ -36,7 +37,8 @@ export default function KanbanBoard() {
         cards={cards}
         setCards={setCards}
       />
+      <BurnBarrel setCards={setCards} />
+      
     </div>
   );
 }
-
