@@ -38,7 +38,6 @@ export default function KanbanBoard() {
         setCards={setCards}
       />
       <BurnBarrel setCards={setCards} />
-      
     </div>
   );
 }

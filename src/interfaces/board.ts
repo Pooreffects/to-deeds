@@ -1,7 +1,7 @@
 export interface Card {
   title: string;
   id: string;
-  column: 'backlog' | 'todo' | 'doing' | 'done';
+  column: CardColumn;
 }
 
 export interface ColumnProps {
@@ -11,3 +11,5 @@ export interface ColumnProps {
   cards: Card[];
   setCards: React.Dispatch<React.SetStateAction<Card[]>>;
 }
+
+export type CardColumn = 'backlog' | 'todo' | 'doing' | 'done';
