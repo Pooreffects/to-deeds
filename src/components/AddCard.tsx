@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Card, CardColumn } from '../interfaces/board';
+import { CardType, CardColumnType } from '../interfaces/board';
 import { FiPlus } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 
 interface AddCardProps {
   column: string;
-  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+  setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
 }
 
 export default function AddCard({ column, setCards }: AddCardProps) {
@@ -16,7 +17,7 @@ export default function AddCard({ column, setCards }: AddCardProps) {
     if (!text.trim().length) return;
 
     const newCard = {
-      column: column as CardColumn,
+      column: column as CardColumnType,
       title: text.trim(),
       id: Math.random().toString(),
     };
@@ -28,7 +29,7 @@ export default function AddCard({ column, setCards }: AddCardProps) {
   return (
     <>
       {adding ? (
-        <form onSubmit={handleSubmit} className='w-full'>
+        <motion.form layout onSubmit={handleSubmit} className='w-full'>
           <textarea
             onChange={(e) => setText(e.target.value)}
             name='add task'
@@ -52,15 +53,16 @@ export default function AddCard({ column, setCards }: AddCardProps) {
               <FiPlus />
             </button>
           </div>
-        </form>
+        </motion.form>
       ) : (
-        <button
+        <motion.button
+          layout
           className='w-full flex items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50'
           onClick={() => setAdding(true)}
         >
           <span>Add card</span>
           <FiPlus />
-        </button>
+        </motion.button>
       )}
     </>
   );

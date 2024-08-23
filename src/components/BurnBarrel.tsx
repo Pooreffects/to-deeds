@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { FaFire } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
-import { Card } from '../interfaces/board';
+import { CardType } from '../interfaces/board';
 
 interface BurnBarrelProps {
-  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+  setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
 }
 
 export default function BurnBarrel({ setCards }: BurnBarrelProps) {

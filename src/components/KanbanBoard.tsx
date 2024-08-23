@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { DEFAULT_CARDS } from '../constants';
-import { Card } from '../interfaces/board';
+import { CardType } from '../interfaces/board';
 import Column from './Column';
 import BurnBarrel from './BurnBarrel';
 
 export default function KanbanBoard() {
-  const [cards, setCards] = useState<Card[]>(DEFAULT_CARDS);
+  const [cards, setCards] = useState<CardType[]>(DEFAULT_CARDS);
 
   return (
     <div className='h-full w-full flex justify-center gap-3 overflow-hidden p-12'>

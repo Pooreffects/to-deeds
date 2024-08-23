@@ -1,11 +1,12 @@
-import { CardColumn } from '../interfaces/board';
+import { CardColumnType, CardType } from '../interfaces/board';
 import DropIndicator from './DropIndicator';
+import { motion } from 'framer-motion';
 
-interface CardProps {
+export interface CardProps {
   title: string;
   id: string;
-  column: CardColumn;
-  handleDragStart: (e: React.DragEvent, id: string) => void;
+  column: CardColumnType;
+  handleDragStart: (e: React.DragEvent<HTMLDivElement>, card: CardType) => void;
 }
 
 export default function Card({
@@ -17,13 +18,21 @@ export default function Card({
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
-      <div
+      <motion.div
+        layout
+        layoutId={id}
         draggable='true'
-        onDragStart={(e) => handleDragStart(e, id)}
+        onDragStart={(e) =>
+          handleDragStart(e as unknown as React.DragEvent<HTMLDivElement>, {
+            title,
+            id,
+            column,
+          })
+        }
         className='cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing'
       >
         <p className='text-sm text-neutral-100'>{title}</p>
-      </div>
+      </motion.div>
     </>
   );
 }
