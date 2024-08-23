@@ -3,14 +3,7 @@ import { CardType, ColumnProps } from '../interfaces/board';
 import DropIndicator from './DropIndicator';
 import AddCard from './AddCard';
 import Card from './Card';
-
-/* Types */
-
-type IndicatorElement = HTMLElement;
-interface NearestIndicator {
-  offset: number;
-  element: IndicatorElement;
-}
+import { highlightIndicator, clearHighlights } from '../utils/dragUtils';
 
 export default function Column({
   title,
@@ -21,69 +14,22 @@ export default function Column({
 }: ColumnProps) {
   const [active, setActive] = useState(false);
 
-  /* Indicators and highlights */
-  function highlightIndicator(e: React.DragEvent<HTMLDivElement>): void {
-    const indicators = getIndicators();
-    clearHighlights(indicators);
-    const el = getNearestIndicator(e, indicators);
-    el.element.style.opacity = '1';
-  }
-
-  function clearHighlights(els?: IndicatorElement[]): void {
-    const indicators = els || getIndicators();
-    indicators.forEach((i) => {
-      if (i instanceof HTMLElement) {
-        i.style.opacity = '0';
-      }
-    });
-  }
-  function getNearestIndicator(
-    e: React.DragEvent<HTMLDivElement>,
-    indicators: IndicatorElement[]
-  ): NearestIndicator {
-    const DISTENCE_OFFSET = 50;
-
-    const el = indicators.reduce<NearestIndicator>(
-      (closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = e.clientY - (box.top + DISTENCE_OFFSET);
-
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      },
-      {
-        offset: Number.NEGATIVE_INFINITY,
-        element: indicators[indicators.length - 1],
-      }
-    );
-
-    return el;
-  }
-  function getIndicators(): IndicatorElement[] {
-    return Array.from(
-      document.querySelectorAll(`[data-column="${column}"]`)
-    ) as IndicatorElement[];
-  }
-
   /* Drag Handlers */
   function handleDragStart(e: React.DragEvent<HTMLDivElement>, card: CardType) {
     e.dataTransfer.setData('cardId', card.id);
   }
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault();
-    highlightIndicator(e);
+    highlightIndicator(e, column);
     setActive(true);
   }
   function handleDragLeave() {
     setActive(false);
-    clearHighlights();
+    clearHighlights(column);
   }
   function handleDragEnd() {
     setActive(false);
-    clearHighlights();
+    clearHighlights(column);
   }
 
   // Filter cards based on the column
