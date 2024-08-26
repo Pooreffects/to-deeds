@@ -5,7 +5,7 @@ import useKanban from '../hooks/useKanban';
 
 export default function BurnBarrel() {
   const [active, setActive] = useState(false);
-  const { setDeeds, deeds } = useKanban();
+  const { deleteDeed } = useKanban();
 
   /* Handle Drag Functionalities */
   function handleDragOver(e: React.DragEvent) {
@@ -21,8 +21,13 @@ export default function BurnBarrel() {
     const deedIdString = e.dataTransfer.getData('deedId');
     const deedId = Number(deedIdString);
 
-    setDeeds(deeds.filter((deed) => deed.id !== deedId));
-    setActive(false);
+    try {
+      deleteDeed(deedId);
+    } catch (error) {
+      console.error('Failed to delete deed:', error);
+    } finally {
+      setActive(false);
+    }
   }
 
   return (
