@@ -1,14 +1,15 @@
-export type CardColumnType = 'backlog' | 'todo' | 'doing' | 'done';
-export interface ColumnProps {
-  title: string;
-  headingColor: string;
-  column: 'backlog' | 'todo' | 'doing' | 'done';
-  cards: CardType[];
-  setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
+export interface ColumnType {
+  id: number;
+  name: string;
+  position: number;
+  created_at: Date;
 }
 
-export interface CardType {
+export interface DeedType {
+  id: number;
   title: string;
-  id: string;
-  column: CardColumnType;
+  description: string;
+  created_at: Date;
+  updated_at: Date | null;
+  columnId: number;
 }

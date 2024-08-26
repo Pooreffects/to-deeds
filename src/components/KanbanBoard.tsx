@@ -1,43 +1,38 @@
-import { useState } from 'react';
-import { DEFAULT_CARDS } from '../constants';
-import { CardType } from '../interfaces/board';
 import Column from './Column';
 import BurnBarrel from './BurnBarrel';
+import useKanban from '../hooks/useKanban';
 
 export default function KanbanBoard() {
-  const [cards, setCards] = useState<CardType[]>(DEFAULT_CARDS);
+  const { columns, deeds, createDeed, setDeeds } = useKanban();
 
   return (
-    <div className='h-full w-full flex justify-center gap-3 overflow-hidden p-12'>
-      <Column
-        title='Backlog'
-        column='backlog'
-        headingColor='text-neutral-500'
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title='TODO'
-        column='todo'
-        headingColor='text-teal-300'
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title='In progress'
-        column='doing'
-        headingColor='text-sky-500'
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title='Complete'
-        column='done'
-        headingColor='text-emerald-200'
-        cards={cards}
-        setCards={setCards}
-      />
-      <BurnBarrel setCards={setCards} />
+    <div className='h-full w-full py-12 px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8'>
+      {columns.map((column) => {
+        const filteredDeeds = deeds.filter(
+          (deed) => deed.columnId === column.id
+        );
+
+        return (
+          <Column
+            key={column.id}
+            name={column.name.charAt(0).toUpperCase() + column.name.slice(1)}
+            column={column}
+            headingColor={
+              column.name === 'backlog'
+                ? 'text-gray-400'
+                : column.name === 'todo'
+                ? 'text-pink-400'
+                : column.name === 'doing'
+                ? 'text-cyan-500'
+                : 'text-purple-300'
+            }
+            deeds={filteredDeeds}
+            createDeed={createDeed}
+            setDeeds={setDeeds}
+          />
+        );
+      })}
+      <BurnBarrel setDeeds={setDeeds} />
     </div>
   );
 }

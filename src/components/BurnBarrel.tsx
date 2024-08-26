@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { FaFire } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
-import { CardType } from '../interfaces/board';
+import { DeedType } from '../interfaces/board';
 
 interface BurnBarrelProps {
-  setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
+  setDeeds: React.Dispatch<React.SetStateAction<DeedType[]>>;
 }
 
-export default function BurnBarrel({ setCards }: BurnBarrelProps) {
+export default function BurnBarrel({ setDeeds }: BurnBarrelProps) {
   const [active, setActive] = useState(false);
 
   /* Handle Drag Functionalities */
@@ -21,9 +21,10 @@ export default function BurnBarrel({ setCards }: BurnBarrelProps) {
   }
 
   function handleDragEnd(e: React.DragEvent) {
-    const cardId = e.dataTransfer.getData('cardId');
+    const deedIdString = e.dataTransfer.getData('deedId');
+    const deedId = Number(deedIdString);
 
-    setCards((prev) => prev.filter((card) => card.id !== cardId));
+    setDeeds((prev) => prev.filter((deed) => deed.id !== deedId));
     setActive(false);
   }
 

@@ -1,12 +1,12 @@
-import Header from './components/Header';
 import KanbanBoard from './components/KanbanBoard';
+import { KanbanProvider } from './context/KanbanContext';
 
-const links = ['Try', 'Go On', 'Whatever', 'Yoo'];
 export default function App() {
   return (
-    <main className='container mx-auto p-4 h-screen'>
-      <Header links={links} />
-      <KanbanBoard />
+    <main className='p-4 h-screen'>
+      <KanbanProvider>
+        <KanbanBoard />
+      </KanbanProvider>
     </main>
   );
 }

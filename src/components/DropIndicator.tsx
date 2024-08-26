@@ -1,6 +1,6 @@
 interface DropIndicatorProps {
   beforeId: string;
-  column: string;
+  column: string | null;
 }
 
 export default function DropIndicator({
