@@ -3,7 +3,7 @@ import BurnBarrel from './BurnBarrel';
 import useKanban from '../hooks/useKanban';
 
 export default function KanbanBoard() {
-  const { columns, deeds, createDeed, setDeeds } = useKanban();
+  const { columns, deeds } = useKanban();
 
   return (
     <div className='h-full w-full py-12 px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8'>
@@ -27,12 +27,10 @@ export default function KanbanBoard() {
                 : 'text-purple-300'
             }
             deeds={filteredDeeds}
-            createDeed={createDeed}
-            setDeeds={setDeeds}
           />
         );
       })}
-      <BurnBarrel setDeeds={setDeeds} />
+      <BurnBarrel />
     </div>
   );
 }

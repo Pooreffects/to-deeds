@@ -6,7 +6,11 @@ import { PostgrestResponse } from '@supabase/supabase-js';
 interface KanbanContextProps {
   columns: ColumnType[];
   deeds: DeedType[];
-  createDeed: (title: string, description: string, columnId: number) => void;
+  createDeed: (
+    title: string,
+    description: string,
+    columnId: number
+  ) => Promise<void>;
   deleteDeed: (deedId: number) => void;
   setDeeds: (newDeeds: DeedType[]) => void;
 }
@@ -58,13 +62,16 @@ const KanbanProvider = ({ children }: { children: ReactNode }) => {
     return data || [];
   };
 
-  const createDeed = async (
+  async function createDeed(
     title: string,
     description: string,
     columnId: number
-  ) => {
+  ): Promise<void> {
+    // Generate a random number for the id
+    const generateRandomId = () => Math.floor(Math.random() * 1000000);
+
     const newDeed: DeedType = {
-      id: deeds.length + 1,
+      id: generateRandomId(),
       title,
       description,
       created_at: new Date(),
@@ -73,31 +80,30 @@ const KanbanProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const { data, error } = await supabase
-      .from('deeds')
+      .from('cards')
       .insert(newDeed)
       .select()
       .single();
+
     if (error) {
       console.error('Error creating deed:', error.message);
       return;
     }
 
-    setDeeds((prevDeeds) => [...prevDeeds, data]);
-  };
+    setDeeds((prevDeeds) => [...prevDeeds, data as DeedType]);
+  }
+  async function deleteDeed(deedId: number): Promise<void> {
+    const { error } = await supabase.from('cards').delete().eq('id', deedId);
 
-  const deleteDeed = async (deedId: number) => {
-    const { error } = await supabase.from('deeds').delete().eq('id', deedId);
     if (error) {
       console.error('Error deleting deed:', error.message);
       return;
     }
-    setDeeds((prevDeeds) => prevDeeds.filter((deed) => deed.id !== deedId));
-  };
 
+    setDeeds((prevDeeds) => prevDeeds.filter((deed) => deed.id !== deedId));
+  }
   return (
-    <KanbanContext.Provider
-      value={{ columns, deeds, createDeed, deleteDeed, setDeeds }}
-    >
+    <KanbanContext.Provider value={{ columns, deeds, setDeeds,createDeed, deleteDeed }}>
       {error && <div>Error: {error}</div>}
       {loading ? <div>Loading...</div> : children}
     </KanbanContext.Provider>

@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { FaFire } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
-import { DeedType } from '../interfaces/board';
+import useKanban from '../hooks/useKanban';
 
-interface BurnBarrelProps {
-  setDeeds: React.Dispatch<React.SetStateAction<DeedType[]>>;
-}
-
-export default function BurnBarrel({ setDeeds }: BurnBarrelProps) {
+export default function BurnBarrel() {
   const [active, setActive] = useState(false);
+  const { setDeeds, deeds } = useKanban();
 
   /* Handle Drag Functionalities */
   function handleDragOver(e: React.DragEvent) {
@@ -24,7 +21,7 @@ export default function BurnBarrel({ setDeeds }: BurnBarrelProps) {
     const deedIdString = e.dataTransfer.getData('deedId');
     const deedId = Number(deedIdString);
 
-    setDeeds((prev) => prev.filter((deed) => deed.id !== deedId));
+    setDeeds(deeds.filter((deed) => deed.id !== deedId));
     setActive(false);
   }
 

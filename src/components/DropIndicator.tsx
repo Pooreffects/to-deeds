@@ -11,7 +11,7 @@ export default function DropIndicator({
     <div
       data-before={beforeId || '-1'}
       data-column={column}
-      className='my-0.5 h-[1px] w-full bg-sky-600 opacity-0'
+      className='my-0.5 h-1 w-full bg-indigo-400/50 opacity-0'
     />
   );
 }

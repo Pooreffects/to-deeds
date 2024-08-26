@@ -1,4 +1,3 @@
-import React, { FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { FiPlus } from 'react-icons/fi';
 import { handleInputChange } from '../utils/handleInputChange';
@@ -9,7 +8,7 @@ interface DeedFormProps {
   description: string;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
   setIsAdding: React.Dispatch<React.SetStateAction<boolean>>;
-  handleSubmit: (e: FormEvent) => void;
+  handleSubmit: (e: React.FormEvent) => void;
 }
 
 const DeedForm: React.FC<DeedFormProps> = ({
@@ -32,18 +31,21 @@ const DeedForm: React.FC<DeedFormProps> = ({
         <input
           autoFocus
           type='text'
-          name='deed-title'
+          name='title'
           placeholder='Add Deed'
           value={title}
           onChange={(e) => handleInputChange(e, inputSetters)}
-          className='w-full rounded-md bg-neutral-700/50 py-2 px-3 text-base text-indigo-100 placeholder:text-indigo-100/80 focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-neutral-600'
+          className='w-full  rounded-md bg-neutral-700/50 py-1 px-3 text-sm text-indigo-100 font-medium placeholder:font-normal tracking-wider placeholder:text-indigo-100/80 focus:outline-none focus:ring-1 focus:ring-indigo-300 transition-colors  border border-neutral-600'
+          maxLength={20}
         />
         <textarea
-          name='deed-description'
+          name='description'
           value={description}
           onChange={(e) => handleInputChange(e, inputSetters)}
           placeholder='Add new description'
-          className='w-full h-24 rounded-md bg-neutral-700/50 py-2 px-3 text-sm text-indigo-100 placeholder:text-indigo-100/80 focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-neutral-600'
+          className='w-full  h-24 rounded-md bg-neutral-700/50 py-2 px-3 text-sm text-indigo-100 font-medium placeholder:font-normal tracking-wider placeholder:text-indigo-100/80 focus:outline-none focus:ring-1 focus:ring-indigo-300 transition-colors  border border-neutral-600 resize-none'
+          required
+          maxLength={100}
         />
 
         <div className='mt-1.5 flex items-center justify-end gap-1.5'>
@@ -56,7 +58,7 @@ const DeedForm: React.FC<DeedFormProps> = ({
           </button>
           <button
             type='submit'
-            className='flex items-center gap-1.5 rounded bg-neutral-50 px-2 py-1 text-xs text-neutral-950 transition-colors hover:bg-neutral-300'
+            className='flex items-center gap-1.5 rounded bg-indigo-100 px-2 py-1 text-xs text-neutral-950 hover:bg-indigo-300 hover:rounded-sm transition-all'
           >
             <span>Add</span>
             <FiPlus />

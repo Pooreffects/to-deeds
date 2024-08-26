@@ -1,38 +1,32 @@
 import { useState } from 'react';
-import { DeedType, ColumnType } from '../interfaces/board';
+import { ColumnType } from '../interfaces/board';
 import { FiPlus } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import DeedForm from './DeedForm';
+import useKanban from '../hooks/useKanban';
 
 interface AddDeedProps {
   column: ColumnType;
-  createDeed: (newDeed: DeedType) => Promise<void>;
 }
 
-export default function AddDeed({ column, createDeed }: AddDeedProps) {
+export default function AddDeed({ column }: AddDeedProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isAdding, setIsAdding] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { createDeed } = useKanban();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title.trim()) return;
-
-    const newDeed: DeedType = {
-      id: Date.now(),
-      title: title.trim(),
-      description: description.trim(),
-      created_at: new Date(),
-      updated_at: new Date(),
-      columnId: column.id,
-    };
-
-    createDeed(newDeed).finally(() => {
+    if (!title.trim() || !description.trim()) return;
+    try {
+      await createDeed(title.trim(), description.trim(), column.id);
+    } finally {
       setIsAdding(false);
       setTitle('');
       setDescription('');
-    });
+    }
   };
 
   return (
