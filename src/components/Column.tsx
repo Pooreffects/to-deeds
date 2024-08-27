@@ -10,6 +10,7 @@ import {
   getNearestIndicator,
 } from '../utils/dragUtils';
 import useKanban from '../hooks/useKanban';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface ColumnProps {
   name: string;
@@ -101,7 +102,8 @@ export default function Column({
           {deeds.length}
         </span>
       </div>
-      <div
+      <motion.div
+        layout
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDragEnd}
@@ -109,16 +111,18 @@ export default function Column({
           active ? 'bg-neutral-700/30' : 'bg-neutral-800/20'
         }`}
       >
-        {deeds.map((deed) => (
-          <Deed
-            key={deed.id}
-            {...deed}
-            handleDragStart={(e) => handleDragStart(e, deed)}
-          />
-        ))}
+        <AnimatePresence>
+          {deeds.map((deed) => (
+            <Deed
+              key={deed.id}
+              {...deed}
+              handleDragStart={(e) => handleDragStart(e, deed)}
+            />
+          ))}
+        </AnimatePresence>
         <DropIndicator beforeId='-1' column={column.name} />
         <AddDeed column={column} />
-      </div>
+      </motion.div>
     </div>
   );
 }

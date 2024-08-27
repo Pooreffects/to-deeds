@@ -11,6 +11,12 @@ interface KanbanContextProps {
     description: string,
     columnId: string
   ) => Promise<void>;
+  updateDeed: (
+    deedId: string,
+    title: string,
+    description: string,
+    columnId: string
+  ) => Promise<void>;
   deleteDeed: (deedId: string) => void;
   setDeeds: (newDeeds: DeedType[]) => void;
 }
@@ -89,6 +95,50 @@ const KanbanProvider = ({ children }: { children: ReactNode }) => {
     setDeeds((prevDeeds) => [...prevDeeds, data as DeedType]);
   }
 
+  async function updateDeed(
+    deedId: string,
+    title: string,
+    description: string,
+    columnId: string
+  ): Promise<void> {
+    const bigIntID = Number(deedId);
+
+    const updatedDeed: Partial<DeedType> = {
+      title,
+      description,
+      columnId,
+      updated_at: new Date(),
+    };
+
+    try {
+      const { data, error } = await supabase
+        .from('cards')
+        .update(updatedDeed)
+        .eq('id', bigIntID)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error updating deed:', error.message);
+        return;
+      }
+
+      if (data) {
+        setDeeds((prevDeeds) =>
+          prevDeeds.map((deed) =>
+            deed.id === deedId ? (data as DeedType) : deed
+          )
+        );
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error('Error updating deed:', err.message);
+      } else {
+        console.error('An unknown error occurred while updating the deed.');
+      }
+    }
+  }
+
   async function deleteDeed(deedId: string): Promise<void> {
     try {
       const bigIntID = Number(deedId);
@@ -114,7 +164,7 @@ const KanbanProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <KanbanContext.Provider
-      value={{ columns, deeds, setDeeds, createDeed, deleteDeed }}
+      value={{ columns, deeds, setDeeds, createDeed, updateDeed, deleteDeed }}
     >
       {error && <div>Error: {error}</div>}
       {loading ? <div>Loading...</div> : children}

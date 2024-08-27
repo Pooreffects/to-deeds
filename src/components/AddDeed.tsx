@@ -16,7 +16,7 @@ export default function AddDeed({ column }: AddDeedProps) {
 
   const { createDeed } = useKanban();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!title.trim() || !description.trim()) return;
@@ -33,12 +33,13 @@ export default function AddDeed({ column }: AddDeedProps) {
     <>
       {isAdding ? (
         <DeedForm
+          mode='add'
           title={title}
           setTitle={setTitle}
           description={description}
           setDescription={setDescription}
           setIsAdding={setIsAdding}
-          handleSubmit={handleSubmit}
+          handleAdd={handleAdd}
         />
       ) : (
         <motion.button
