@@ -9,9 +9,9 @@ interface KanbanContextProps {
   createDeed: (
     title: string,
     description: string,
-    columnId: number
+    columnId: string
   ) => Promise<void>;
-  deleteDeed: (deedId: number) => void;
+  deleteDeed: (deedId: string) => void;
   setDeeds: (newDeeds: DeedType[]) => void;
 }
 
@@ -65,17 +65,13 @@ const KanbanProvider = ({ children }: { children: ReactNode }) => {
   async function createDeed(
     title: string,
     description: string,
-    columnId: number
+    columnId: string
   ): Promise<void> {
-    // Generate a random number for the id
-    const generateRandomId = () => Math.floor(Math.random() * 1000000);
-
-    const newDeed: DeedType = {
-      id: generateRandomId(),
+    const newDeed: Omit<DeedType, 'id'> = {
       title,
       description,
       created_at: new Date(),
-      updated_at: null,
+      updated_at: new Date(),
       columnId,
     };
 
@@ -92,18 +88,34 @@ const KanbanProvider = ({ children }: { children: ReactNode }) => {
 
     setDeeds((prevDeeds) => [...prevDeeds, data as DeedType]);
   }
-  async function deleteDeed(deedId: number): Promise<void> {
-    const { error } = await supabase.from('cards').delete().eq('id', deedId);
 
-    if (error) {
-      console.error('Error deleting deed:', error.message);
-      return;
+  async function deleteDeed(deedId: string): Promise<void> {
+    try {
+      const bigIntID = Number(deedId);
+      const { error } = await supabase
+        .from('cards')
+        .delete()
+        .eq('id', bigIntID);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      setDeeds((prevDeeds) => {
+        const updatedDeeds = prevDeeds.filter(
+          (deed) => Number(deed.id) !== bigIntID
+        );
+        return updatedDeeds;
+      });
+    } catch (err) {
+      console.error('Error deleting deed:', err);
     }
-
-    setDeeds((prevDeeds) => prevDeeds.filter((deed) => deed.id !== deedId));
   }
+
   return (
-    <KanbanContext.Provider value={{ columns, deeds, setDeeds,createDeed, deleteDeed }}>
+    <KanbanContext.Provider
+      value={{ columns, deeds, setDeeds, createDeed, deleteDeed }}
+    >
       {error && <div>Error: {error}</div>}
       {loading ? <div>Loading...</div> : children}
     </KanbanContext.Provider>

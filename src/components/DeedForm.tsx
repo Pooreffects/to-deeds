@@ -36,7 +36,7 @@ const DeedForm: React.FC<DeedFormProps> = ({
           value={title}
           onChange={(e) => handleInputChange(e, inputSetters)}
           className='w-full  rounded-md bg-neutral-700/50 py-1 px-3 text-sm text-indigo-100 font-medium placeholder:font-normal tracking-wider placeholder:text-indigo-100/80 focus:outline-none focus:ring-1 focus:ring-indigo-300 transition-colors  border border-neutral-600'
-          maxLength={20}
+          maxLength={50}
         />
         <textarea
           name='description'
@@ -45,7 +45,7 @@ const DeedForm: React.FC<DeedFormProps> = ({
           placeholder='Add new description'
           className='w-full  h-24 rounded-md bg-neutral-700/50 py-2 px-3 text-sm text-indigo-100 font-medium placeholder:font-normal tracking-wider placeholder:text-indigo-100/80 focus:outline-none focus:ring-1 focus:ring-indigo-300 transition-colors  border border-neutral-600 resize-none'
           required
-          maxLength={100}
+          maxLength={120}
         />
 
         <div className='mt-1.5 flex items-center justify-end gap-1.5'>

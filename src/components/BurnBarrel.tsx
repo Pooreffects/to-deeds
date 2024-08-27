@@ -18,8 +18,7 @@ export default function BurnBarrel() {
   }
 
   function handleDragEnd(e: React.DragEvent) {
-    const deedIdString = e.dataTransfer.getData('deedId');
-    const deedId = Number(deedIdString);
+    const deedId = e.dataTransfer.getData('deedId');
 
     try {
       deleteDeed(deedId);

@@ -1,15 +1,15 @@
 export interface ColumnType {
-  id: number;
+  id: string;
   name: string;
   position: number;
-  created_at: Date;
+  created_at: Date | string;
 }
 
 export interface DeedType {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  created_at: Date;
-  updated_at: Date | null;
-  columnId: number;
+  created_at: Date | string;
+  updated_at: Date | string;
+  columnId: string;
 }

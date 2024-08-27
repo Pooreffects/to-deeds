@@ -3,12 +3,12 @@ import DropIndicator from './DropIndicator';
 import { motion } from 'framer-motion';
 
 export interface DeedProps {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  created_at: Date;
-  updated_at: Date | null;
-  columnId: number;
+  created_at: string;
+  updated_at: '';
+  columnId: string;
   handleDragStart: (e: React.DragEvent<HTMLDivElement>, deed: DeedType) => void;
 }
 
@@ -32,20 +32,17 @@ export default function Deed({
 
   return (
     <>
-      <DropIndicator
-        beforeId={id.toString()}
-        column={String(columnId) || null}
-      />
+      <DropIndicator beforeId={id} column={columnId || null} />
       <motion.div
         layout
-        layoutId={id.toString()}
+        layoutId={id}
         draggable='true'
         onDragStart={(e) =>
           handleDragStart(e as unknown as React.DragEvent<HTMLDivElement>, {
             id,
             title,
             description: description || '',
-            created_at: new Date(created_at),
+            created_at: new Date(created_at).toString(),
             updated_at,
             columnId,
           })

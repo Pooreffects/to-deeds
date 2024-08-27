@@ -53,11 +53,13 @@ export default function Column({
       setActive(false);
       clearHighlights(column.name);
 
-      const deedId = Number(e.dataTransfer.getData('deedId'));
+      // Get the deed ID from dataTransfer as a string
+      const deedId = e.dataTransfer.getData('deedId');
       const indicators = getIndicators(column.name);
       const { element } = getNearestIndicator(e, indicators);
 
-      const before = Number(element.dataset.before || '-1');
+      // Get 'before' value as a string
+      const before = element.dataset.before || '-1';
 
       // Early return if no change in position
       if (before === deedId) return;
@@ -70,9 +72,11 @@ export default function Column({
       const updatedDeeds = deeds.filter((deed) => deed.id !== deedId);
 
       // Determine the new position for the deed
-      if (before === -1) {
+      if (before === '-1') {
+        // Insert at the end if before is '-1'
         updatedDeeds.push({ ...deedToTransfer, columnId: column.id });
       } else {
+        // Find the correct index to insert the deed
         const insertIndex = updatedDeeds.findIndex(
           (deed) => deed.id === before
         );
